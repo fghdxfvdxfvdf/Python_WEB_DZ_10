@@ -1,0 +1,30 @@
+{% extends 'quotes/base.html' %}
+{% load extract %}
+
+{% block title %}{{ authors.author }}{% endblock %}
+
+{% block content %}
+
+<body>
+    <div class="container">
+
+        <div class="author-details">
+            <h3 class="author-title">{{ authors.author }}</h3>
+            
+            <p><strong>Born:</strong>
+                <span class="author-born-date">{{ authors.borns }}</span>
+                <span class="author-born-location">{{ authors.borns_location }}</span>
+            </p>
+            
+            <p>
+                <strong>Description:</strong></p>
+            <div class="author-description">
+                {{ authors.descriptions }}
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+{% endblock %}

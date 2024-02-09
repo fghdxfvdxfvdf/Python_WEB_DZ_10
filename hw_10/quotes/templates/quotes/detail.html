@@ -1,0 +1,22 @@
+{% extends "quotes/base.html" %}
+{% load extract %}
+
+{% block content %}
+
+{% for author in authors %}
+<h1>{{author.author}}</h1>
+<p>Description: <b>{{author.descriptions}}</b></p>
+<p>Time of creation: <kbd>{{author.created}}</kbd></p>
+{% if author.done %}
+<p>Status:
+    <ins>Completed</ins>
+</p>
+{% else %}
+<p>Status: <i>Not implemented</i></p>
+{% endif %}
+<p>Author: <small>
+    {{ author.author|author }}
+</small></p>
+{% endfor %}
+
+{% endblock %}

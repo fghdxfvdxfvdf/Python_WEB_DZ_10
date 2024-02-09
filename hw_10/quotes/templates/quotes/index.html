@@ -1,0 +1,131 @@
+{% extends 'quotes/base.html' %}
+
+{% load extract %}
+
+{% block content %}
+
+<head>
+    <style>
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+        }
+
+        .pager {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .pager li {
+            margin-right: 10px;
+        }
+
+        .pager li a {
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<main class="container">
+    <nav style="margin-bottom: 20px; border-bottom: 2px solid; padding-left: 30px">
+        {% if user.is_authenticated %}
+            <ul>
+                <li><a href="{% url 'quotes:post_author' %}" role="button">Post author</a></li>
+                
+                <li><a href="{% url 'quotes:post_quote' %}" role="button">Post quote</a></li>
+
+            </ul>
+            <ul>
+                <li>Welcome <b>{{ user.username }}!</b></li>
+
+                <li><a href="{% url 'users:profile' %}" role="button">Profile</a></li>
+
+                <li><a href="{% url 'users:logout' %}" role="button">Logout</a></li>
+            </ul>
+
+            <img src="{{ user.profile.avatar.url }}" alt="avatar of user"/>
+            
+            <br>
+            <br>
+
+        {% endif %}
+    </nav>
+
+    {% for note in notes %}
+        <ul>
+            <li>
+                {% if not note.done %}
+                    <a href="{% url 'quotes:detail' note.id %}" role="button" class="outline"> {{ note.name }} </a>
+                    <a href="{% url 'quotes:set_done' note.id %}" role="button"> Mark Done </a>
+                    <a href="{% url 'quotes:delete' note.id %}" role="button" class="contrast"> Delete note </a>
+                {% else %}
+                    <a href="{% url 'quotes:detail' note.id %}" role="button" class="secondary"><s>{{ note.name }}</s></a>
+                {% endif %}
+            </li>
+        </ul>
+    {% endfor %}
+</main>
+
+
+<div class="row">
+    <div class="col-md-8">
+        {% for quote in quotes %}
+        <div class="quote" itemscope="" itemtype="http://schema.org/CreativeWork">
+            <span class="text" itemprop="text">
+                {{ quote.quote }}
+            </span>
+
+            <span>by <small class="author" itemprop="author">{{ quote.author|author }}</small>
+                {% if quote.author %}
+                   {{ quote.author.id }}
+                   <a href="/author/{{ quote.author }}">(about)</a>
+                {% endif %}
+             </span>
+             
+            <div class="tags">
+                Tags:
+                {% for tag in quote.tags %}
+                    <a class="tag" href="/tag/{{ tag }}">{{ tag }}</a>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+    <nav>
+        <ul class="pager">
+            
+            <li class="previous">
+                <a class="{% if not quotes.has_previous %} disabled {% endif %}" 
+                        href="{% if quotes.has_previous %} {% url 'quotes:root_paginate' quotes.previous_page_number %} {% else %} # {% endif %}">
+                    <span aria-hidden="true">
+                    </span> Previous
+                </a>
+            </li>
+            
+            
+            <li class="next">
+                <a class="{% if not quotes.has_next %} disabled {% endif %}" 
+                        href="{% if quotes.has_next %} {% url 'quotes:root_paginate' quotes.next_page_number %} {% else %} # {% endif %}">
+                        Next 
+                    <span aria-hidden="true">
+                    </span>
+                </a>
+            </li>
+            
+        </ul>
+    </nav>
+    
+</div>
+</div>
+{% endblock %}

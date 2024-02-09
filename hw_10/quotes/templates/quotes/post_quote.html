@@ -1,0 +1,29 @@
+{% extends 'quotes/base.html' %}
+
+{% block title %}Add quote - Quotes{% endblock %}
+
+{% block content %}
+<div style="width: 50%; margin: auto; text-align: center; font-family: 'Raleway'; font-size: large;">
+    <h2 style="color: green; margin-bottom: 50px;">ADD QUOTE</h2>
+    <form method="post" action="{% url 'quotes:post_quote' %}" style="display: inline-block; text-align: left;">
+        {% csrf_token %}
+        
+        <div style="margin-bottom: 10px;">
+            <label for="{{ quote_form.quote.id_for_label }}" style="margin-right: 50px;">{{ quote_form.quote.label }}</label>
+            {{ quote_form.quote }}
+        </div>
+
+        <div style="margin-bottom: 10px;">
+            <label for="{{ quote_form.tags.id_for_label }}" style="margin-right: 60px;">{{ quote_form.tags.label }}</label>
+            {{ quote_form.tags }}
+        </div>
+
+        <div style="margin-bottom: 30px;">
+            <label for="{{ quote_form.author.id_for_label }}" style="margin-right: 40px;">{{ quote_form.author.label }}</label>
+            {{ quote_form.author }}
+        </div>
+
+        <button type="submit" style="margin-top: 10px; float: right; " class="btn btn-success"> Save</button>
+    </form>
+</div>
+{% endblock %}
